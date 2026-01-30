@@ -1,0 +1,32 @@
+flowchart LR
+    subgraph Students
+        S1[Student 1<br/>GitHub repo]
+        S2[Student 2<br/>GitHub repo]
+        S3[Student N<br/>GitHub repo]
+    end
+
+    subgraph Backend ["Cloudflare Workers"]
+        WH[Webhook Handler]
+        API[API Worker]
+        D1[(D1 Database)]
+    end
+
+    subgraph Frontend ["Dashboard"]
+        LB[Leaderboard]
+        PM[Progress Matrix]
+        TD[Team Dashboard]
+        MR[Mentor Review]
+    end
+
+    S1 -->|push/PR| WH
+    S2 -->|push/PR| WH
+    S3 -->|push/PR| WH
+    
+    WH -->|parse & store| D1
+    D1 -->|query| API
+    API --> LB
+    API --> PM
+    API --> TD
+    API --> MR
+
+    MR -->|update score| D1
